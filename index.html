@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/calorie-tracker.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -312,19 +311,12 @@ cat > /mnt/user-data/outputs/calorie-tracker.html << 'HTMLEOF'
   .w-stat-val.danger  { color: var(--danger); }
   .w-stat-lbl { font-size: 11px; color: var(--sub); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
 
-  /* line chart */
-  .wchart-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
-  .wchart-card .card-label { margin-bottom: 14px; }
-  #weight-chart-svg { width: 100%; display: block; }
 
   /* weigh-in log */
   .wlog-item { background: var(--bg3); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .wlog-date { font-size: 14px; font-weight: 500; }
   .wlog-sub  { font-size: 12px; color: var(--sub); margin-top: 2px; }
   .wlog-val  { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--green); }
-  .wlog-del  { background: none; border: none; color: var(--sub2); cursor: pointer; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; transition: color 0.15s; margin-left: 10px; }
-  .wlog-del:active { color: var(--danger); }
-  .wlog-del svg { width: 16px; height: 16px; }
 
   /* weight modal */
   #wmodal-overlay {
@@ -496,12 +488,6 @@ cat > /mnt/user-data/outputs/calorie-tracker.html << 'HTMLEOF'
       <span class="goal-unit">lbs</span>
     </div>
     <button class="btn-save" onclick="saveWeightSettings()">Save Weight Settings</button>
-
-    <div class="divider"></div>
-
-    <label class="settings-label">Data</label>
-    <button class="btn-danger" onclick="confirmClear()">Clear All Data</button>
-    <div class="app-info">Calories · Local storage only<br>No accounts · No tracking</div>
   </div>
 
 </div><!-- /app -->
@@ -560,18 +546,6 @@ cat > /mnt/user-data/outputs/calorie-tracker.html << 'HTMLEOF'
     <div class="modal-row">
       <button class="btn-cancel" onclick="closeWModal()">Cancel</button>
       <button class="btn-primary" onclick="saveWeighIn()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── CONFIRM ── -->
-<div id="confirm-overlay">
-  <div id="confirm-box">
-    <div class="confirm-title">Clear All Data?</div>
-    <div class="confirm-msg">This will permanently delete all calorie entries, weigh-ins, and reset all goals. This cannot be undone.</div>
-    <div class="confirm-btns">
-      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="confirm-ok" onclick="clearAllData()">Delete</button>
     </div>
   </div>
 </div>
@@ -824,11 +798,6 @@ function saveWeighIn() {
   toast(`Weight logged: ${w} lbs`);
 }
 
-function deleteWeighIn(date) {
-  weighIns = weighIns.filter(x => x.date !== date);
-  saveWeighIns(); renderWeight();
-}
-
 function renderWeight() {
   const container = document.getElementById('weight-content');
 
@@ -938,11 +907,6 @@ function renderWeight() {
       </div>` : ''}
     </div>`;
 
-  // Line chart
-  if (sorted.length >= 1) {
-    html += `<div class="wchart-card"><div class="card-label">Progress Chart</div><svg id="weight-chart-svg" viewBox="0 0 320 160" preserveAspectRatio="xMidYMid meet"></svg></div>`;
-  }
-
   // Log
   if (sorted.length > 0) {
     html += `<div class="card-label" style="padding-left:4px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:8px;">Weigh-in Log</div>`;
@@ -959,108 +923,12 @@ function renderWeight() {
           <div class="wlog-date">${fmtDateStr(w.date)}${isLatest?' <span style="color:var(--green);font-size:11px;margin-left:6px;">LATEST</span>':''}</div>
           ${changeStr ? `<div class="wlog-sub">${changeStr} from previous</div>` : ''}
         </div>
-        <div style="display:flex;align-items:center;">
-          <div class="wlog-val">${w.weight.toFixed(1)}</div>
-          <button class="wlog-del" onclick="deleteWeighIn('${w.date}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-            </svg>
-          </button>
-        </div>
+        <div class="wlog-val">${w.weight.toFixed(1)}</div>
       </div>`;
     }).join('');
   }
 
   container.innerHTML = html;
-
-  // Draw SVG chart if we have data
-  if (sorted.length >= 1) {
-    drawWeightChart(sorted);
-  }
-}
-
-function drawWeightChart(sorted) {
-  const svg = document.getElementById('weight-chart-svg');
-  if (!svg) return;
-
-  const W = 320, H = 160, PAD = { t:20, r:20, b:30, l:44 };
-  const cW = W - PAD.l - PAD.r;
-  const cH = H - PAD.t - PAD.b;
-
-  // value range: include goal and start
-  const allVals = sorted.map(x=>x.weight).concat([wGoal, wStart]);
-  let minV = Math.min(...allVals);
-  let maxV = Math.max(...allVals);
-  const pad = Math.max((maxV - minV) * 0.15, 2);
-  minV -= pad; maxV += pad;
-
-  const xScale = i => sorted.length === 1 ? PAD.l + cW/2 : PAD.l + (i/(sorted.length-1)) * cW;
-  const yScale = v => PAD.t + cH - ((v - minV)/(maxV - minV)) * cH;
-
-  // grid lines
-  const numGridLines = 4;
-  let gridHTML = '';
-  for (let i = 0; i <= numGridLines; i++) {
-    const v   = minV + (maxV - minV) * (i / numGridLines);
-    const y   = yScale(v);
-    const lbl = v.toFixed(0);
-    gridHTML += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="#2a2a2a" stroke-width="1"/>`;
-    gridHTML += `<text x="${PAD.l - 6}" y="${y + 4}" font-size="9" fill="#555" text-anchor="end" font-family="DM Mono,monospace">${lbl}</text>`;
-  }
-
-  // goal line
-  const goalY = yScale(wGoal);
-  gridHTML += `<line x1="${PAD.l}" y1="${goalY}" x2="${W-PAD.r}" y2="${goalY}" stroke="#4ade80" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>`;
-  gridHTML += `<text x="${W-PAD.r+4}" y="${goalY+4}" font-size="9" fill="#4ade80" font-family="DM Mono,monospace">Goal</text>`;
-
-  // line path
-  let pathD = sorted.map((pt,i) => `${i===0?'M':'L'}${xScale(i).toFixed(1)},${yScale(pt.weight).toFixed(1)}`).join(' ');
-
-  // area fill
-  const areaD = pathD + ` L${xScale(sorted.length-1).toFixed(1)},${(PAD.t+cH).toFixed(1)} L${PAD.l.toFixed(1)},${(PAD.t+cH).toFixed(1)} Z`;
-
-  // dots
-  let dotsHTML = sorted.map((pt,i) => {
-    const x = xScale(i), y = yScale(pt.weight);
-    const isLatest = i === sorted.length - 1;
-    const isFirst  = i === 0;
-    const r = isLatest ? 5 : 3.5;
-    const fill = isLatest ? '#4ade80' : '#2a2a2a';
-    const stroke = '#4ade80';
-    let lbl = '';
-    if (isLatest || isFirst || sorted.length <= 4) {
-      const above = y > PAD.t + 20;
-      lbl = `<text x="${x}" y="${above ? y-9 : y+16}" font-size="9" fill="${isLatest?'#4ade80':'#888'}" text-anchor="middle" font-family="DM Mono,monospace" font-weight="${isLatest?'500':'400'}">${pt.weight.toFixed(1)}</text>`;
-    }
-    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>${lbl}`;
-  }).join('');
-
-  // x-axis date labels (first and last only)
-  let xLabels = '';
-  if (sorted.length >= 1) {
-    const first = sorted[0];
-    const last  = sorted[sorted.length-1];
-    const fx = xScale(0), lx = xScale(sorted.length-1);
-    const labelY = PAD.t + cH + 18;
-    const fmt = s => { const [y,m,d]=s.split('-'); return `${parseInt(m)}/${parseInt(d)}`; };
-    xLabels += `<text x="${fx}" y="${labelY}" font-size="9" fill="#555" text-anchor="middle" font-family="DM Sans,sans-serif">${fmt(first.date)}</text>`;
-    if (sorted.length > 1) {
-      xLabels += `<text x="${lx}" y="${labelY}" font-size="9" fill="#4ade80" text-anchor="middle" font-family="DM Sans,sans-serif">${fmt(last.date)}</text>`;
-    }
-  }
-
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="wgrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#4ade80" stop-opacity="0.2"/>
-        <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    ${gridHTML}
-    <path d="${areaD}" fill="url(#wgrad)"/>
-    <path d="${pathD}" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px rgba(74,222,128,0.4))"/>
-    ${dotsHTML}
-    ${xLabels}`;
 }
 
 // ── SETTINGS ──
@@ -1079,18 +947,6 @@ function saveWeightSettings() {
   const g = parseFloat(document.getElementById('wgoal-input').value);
   if (isNaN(s) || s <= 0 || isNaN(g) || g <= 0) { toast('Enter valid weights'); return; }
   wStart = s; wGoal = g; saveWSettings(); toast('Weight settings saved!');
-}
-
-// ── CLEAR ──
-function confirmClear() { document.getElementById('confirm-overlay').classList.add('open'); }
-function closeConfirm()  { document.getElementById('confirm-overlay').classList.remove('open'); }
-function clearAllData() {
-  entries = []; goal = 2000; weighIns = []; wStart = 0; wGoal = 0;
-  saveEntries(); saveGoalData(); saveWeighIns();
-  localStorage.removeItem(KEY_WSTART); localStorage.removeItem(KEY_WGOAL);
-  closeConfirm(); homeDayOffset = 0; histWeekOffset = 0;
-  toast('All data cleared');
-  renderSettings(); renderHome();
 }
 
 // ── INIT ──
