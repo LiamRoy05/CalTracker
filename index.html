@@ -361,6 +361,12 @@
   .goal-unit { font-size: 14px; font-weight: 600; color: var(--sub); letter-spacing: 0.08em; }
   .btn-save { width: 100%; background: var(--green); border: none; border-radius: 14px; color: #000; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-bottom: 14px; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 16px var(--green-glow); transition: opacity 0.15s; }
   .btn-save:active { opacity: 0.85; }
+  .btn-secondary { width: 100%; background: var(--bg3); border: 1.5px solid var(--border); border-radius: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-bottom: 14px; -webkit-tap-highlight-color: transparent; transition: background 0.15s, border-color 0.15s; }
+  .btn-secondary:active { background: var(--border); }
+  .locked-goal-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 16px 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .locked-goal-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); }
+  .locked-goal-value { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: var(--green); }
+  .settings-note { color: var(--sub); font-size: 13px; line-height: 1.45; margin: -6px 4px 16px; }
   .divider { height: 1px; background: var(--border); margin: 24px 0; }
   .btn-danger { width: 100%; background: rgba(248,113,113,0.1); border: 1.5px solid rgba(248,113,113,0.25); border-radius: 14px; color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s; }
   .btn-danger:active { background: rgba(248,113,113,0.2); }
@@ -380,6 +386,18 @@
   .confirm-btns  { display: flex; gap: 10px; }
   .confirm-cancel { flex: 1; background: var(--bg3); border: 1.5px solid var(--border); border-radius: 12px; color: var(--sub); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 13px; cursor: pointer; }
   .confirm-ok { flex: 1; background: rgba(248,113,113,0.15); border: 1.5px solid rgba(248,113,113,0.35); border-radius: 12px; color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; padding: 13px; cursor: pointer; }
+
+  /* Hide number input up/down arrows everywhere */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
 </style>
 </head>
 <body>
@@ -477,17 +495,7 @@
     <div class="divider"></div>
 
     <div class="settings-section-title">Weight</div>
-    <label class="settings-label">Starting Weight</label>
-    <div class="goal-input-wrap">
-      <input class="goal-input" id="wstart-input" type="number" inputmode="decimal" placeholder="180">
-      <span class="goal-unit">lbs</span>
-    </div>
-    <label class="settings-label">Goal Weight</label>
-    <div class="goal-input-wrap">
-      <input class="goal-input" id="wgoal-input" type="number" inputmode="decimal" placeholder="160">
-      <span class="goal-unit">lbs</span>
-    </div>
-    <button class="btn-save" onclick="saveWeightSettings()">Save Weight Settings</button>
+    <div id="weight-settings-content"></div>
   </div>
 
 </div><!-- /app -->
@@ -569,6 +577,7 @@ let wGoal      = parseFloat(localStorage.getItem(KEY_WGOAL))  || 0;
 
 let homeDayOffset  = 0;
 let histWeekOffset = 0;
+let weightGoalEditMode = false;
 
 // ── DATE UTILS ──
 function dateStr(d) {
@@ -933,20 +942,87 @@ function renderWeight() {
 
 // ── SETTINGS ──
 function renderSettings() {
-  document.getElementById('goal-input').value   = goal;
-  document.getElementById('wstart-input').value = wStart || '';
-  document.getElementById('wgoal-input').value  = wGoal  || '';
+  document.getElementById('goal-input').value = goal;
+  renderWeightSettingsBlock();
 }
+
+function renderWeightSettingsBlock() {
+  const box = document.getElementById('weight-settings-content');
+  if (!box) return;
+
+  const hasGoal = wStart > 0 && wGoal > 0;
+
+  if (hasGoal && !weightGoalEditMode) {
+    box.innerHTML = `
+      <div class="settings-note">Your current journey is locked so your progress stays consistent. Use Update Goal to start a new weight loss/gain journey.</div>
+      <div class="locked-goal-card">
+        <div class="locked-goal-label">Starting Weight</div>
+        <div class="locked-goal-value">${wStart.toFixed(1)} lbs</div>
+      </div>
+      <div class="locked-goal-card">
+        <div class="locked-goal-label">Goal Weight</div>
+        <div class="locked-goal-value">${wGoal.toFixed(1)} lbs</div>
+      </div>
+      <button class="btn-secondary" onclick="enableWeightGoalEdit()">Update Goal</button>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    ${hasGoal ? '<div class="settings-note">Starting a new journey will clear your current weigh-in log and reset progress using the new start and goal weights.</div>' : '<div class="settings-note">Create your starting weight and goal weight to begin weight tracking.</div>'}
+    <label class="settings-label">Starting Weight</label>
+    <div class="goal-input-wrap">
+      <input class="goal-input" id="wstart-input" type="number" inputmode="decimal" placeholder="180" value="${hasGoal ? wStart : ''}">
+      <span class="goal-unit">lbs</span>
+    </div>
+    <label class="settings-label">Goal Weight</label>
+    <div class="goal-input-wrap">
+      <input class="goal-input" id="wgoal-input" type="number" inputmode="decimal" placeholder="160" value="${hasGoal ? wGoal : ''}">
+      <span class="goal-unit">lbs</span>
+    </div>
+    <button class="btn-save" onclick="saveWeightSettings(${hasGoal ? 'true' : 'false'})">${hasGoal ? 'Start New Journey' : 'Create Weight Goal'}</button>
+    ${hasGoal ? '<button class="btn-secondary" onclick="cancelWeightGoalEdit()">Cancel</button>' : ''}
+  `;
+}
+
+function enableWeightGoalEdit() {
+  weightGoalEditMode = true;
+  renderWeightSettingsBlock();
+}
+
+function cancelWeightGoalEdit() {
+  weightGoalEditMode = false;
+  renderWeightSettingsBlock();
+}
+
 function saveGoal() {
   const v = parseInt(document.getElementById('goal-input').value);
   if (isNaN(v) || v < 100) { toast('Enter a valid goal (min 100)'); return; }
   goal = v; saveGoalData(); toast('Calorie goal saved!');
 }
-function saveWeightSettings() {
+
+function saveWeightSettings(startNewJourney) {
   const s = parseFloat(document.getElementById('wstart-input').value);
   const g = parseFloat(document.getElementById('wgoal-input').value);
   if (isNaN(s) || s <= 0 || isNaN(g) || g <= 0) { toast('Enter valid weights'); return; }
-  wStart = s; wGoal = g; saveWSettings(); toast('Weight settings saved!');
+
+  wStart = s;
+  wGoal = g;
+
+  if (startNewJourney) {
+    weighIns = [];
+    saveWeighIns();
+  }
+
+  saveWSettings();
+  weightGoalEditMode = false;
+  renderSettings();
+  renderWeight();
+  toast(startNewJourney ? 'New weight journey started!' : 'Weight goal created!');
+
+  if (startNewJourney) {
+    setTimeout(() => showScreen('weight'), 500);
+  }
 }
 
 // ── INIT ──
