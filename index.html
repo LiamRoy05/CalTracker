@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/calorie-tracker.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +89,7 @@
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.03em;
-    padding: 4px 20px;
+    padding: 4px 14px;
     cursor: pointer;
     transition: color 0.2s;
     -webkit-tap-highlight-color: transparent;
@@ -97,7 +98,7 @@
   .nav-btn.active { color: var(--green); }
   .nav-btn.active svg { transform: scale(1.1); }
 
-  /* ── DATE NAV ROW (shared by home + history) ── */
+  /* ── DATE NAV ROW ── */
   .date-nav {
     display: flex;
     align-items: center;
@@ -121,29 +122,15 @@
   .date-nav-arrow:disabled { opacity: 0.2; pointer-events: none; }
   .date-nav-arrow svg { width: 18px; height: 18px; }
   .date-nav-center { flex: 1; text-align: center; }
-  .date-nav-title {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
-  .date-nav-sub {
-    font-size: 11px;
-    color: var(--sub);
-    font-weight: 500;
-    margin-top: 1px;
-    letter-spacing: 0.04em;
-  }
+  .date-nav-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+  .date-nav-sub { font-size: 11px; color: var(--sub); font-weight: 500; margin-top: 1px; letter-spacing: 0.04em; }
   .date-nav-today-badge {
     display: inline-block;
     background: var(--green-dim);
     color: var(--green);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-top: 3px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px; margin-top: 3px;
   }
 
   /* ── CARDS ── */
@@ -155,114 +142,54 @@
     margin-bottom: 14px;
   }
   .card-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--sub);
-    margin-bottom: 6px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sub); margin-bottom: 6px;
   }
 
-  /* ── HOME: RING CARD ── */
+  /* ── RING CARD ── */
   #ring-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
     padding: 28px 20px 24px;
-    background: var(--card);
-    border-radius: 28px;
-    border: 1px solid var(--border);
+    background: var(--card); border-radius: 28px; border: 1px solid var(--border);
     margin-bottom: 14px;
-    position: relative;
   }
-  .ring-wrap {
-    position: relative;
-    width: 200px; height: 200px;
-    margin-bottom: 20px;
-  }
-  #ring-svg {
-    width: 200px; height: 200px;
-    transform: rotate(-90deg);
-  }
+  .ring-wrap { position: relative; width: 200px; height: 200px; margin-bottom: 20px; }
+  #ring-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
   .ring-track { fill: none; stroke: var(--bg3); stroke-width: 14; }
   .ring-fill {
-    fill: none;
-    stroke: var(--green);
-    stroke-width: 14;
-    stroke-linecap: round;
+    fill: none; stroke: var(--green); stroke-width: 14; stroke-linecap: round;
     transition: stroke-dashoffset 0.6s cubic-bezier(.4,0,.2,1);
     filter: drop-shadow(0 0 8px var(--green-glow));
   }
-  .ring-fill.over {
-    stroke: var(--danger);
-    filter: drop-shadow(0 0 8px rgba(248,113,113,0.4));
-  }
-  .ring-center {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-  }
-  .ring-remaining {
-    font-size: 44px; font-weight: 700;
-    letter-spacing: -2px;
-    font-family: 'DM Mono', monospace;
-    line-height: 1;
-  }
+  .ring-fill.over { stroke: var(--danger); filter: drop-shadow(0 0 8px rgba(248,113,113,0.4)); }
+  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring-remaining { font-size: 44px; font-weight: 700; letter-spacing: -2px; font-family: 'DM Mono', monospace; line-height: 1; }
   .ring-remaining.over { color: var(--danger); }
-  .ring-label {
-    font-size: 12px; font-weight: 500;
-    color: var(--sub); margin-top: 4px;
-    letter-spacing: 0.05em;
-  }
+  .ring-label { font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 4px; letter-spacing: 0.05em; }
   .ring-stats { display: flex; width: 100%; gap: 10px; }
-  .ring-stat {
-    flex: 1; background: var(--bg3);
-    border-radius: 14px; padding: 12px; text-align: center;
-  }
-  .ring-stat-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 22px; font-weight: 500; letter-spacing: -0.5px;
-  }
-  .ring-stat-lbl {
-    font-size: 11px; color: var(--sub);
-    font-weight: 500; margin-top: 2px; letter-spacing: 0.04em;
-  }
+  .ring-stat { flex: 1; background: var(--bg3); border-radius: 14px; padding: 12px; text-align: center; }
+  .ring-stat-val { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -0.5px; }
+  .ring-stat-lbl { font-size: 11px; color: var(--sub); font-weight: 500; margin-top: 2px; letter-spacing: 0.04em; }
 
   /* ── ADD BUTTON ── */
   #add-btn {
-    width: 100%;
-    background: var(--green);
-    color: #000;
-    border: none;
-    border-radius: 18px;
-    padding: 18px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 17px; font-weight: 700;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-top: 4px;
-    -webkit-tap-highlight-color: transparent;
+    width: 100%; background: var(--green); color: #000; border: none;
+    border-radius: 18px; padding: 18px;
+    font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 4px; -webkit-tap-highlight-color: transparent;
     transition: opacity 0.15s, transform 0.15s;
     box-shadow: 0 4px 24px var(--green-glow);
   }
   #add-btn:active { opacity: 0.85; transform: scale(0.98); }
   #add-btn svg { width: 20px; height: 20px; }
-
-  /* past-day: dimmer add button */
-  #add-btn.past {
-    background: var(--bg3);
-    color: var(--sub);
-    box-shadow: none;
-    border: 1.5px solid var(--border);
-  }
+  #add-btn.past { background: var(--bg3); color: var(--sub); box-shadow: none; border: 1.5px solid var(--border); }
 
   /* ── LOG LIST ── */
   .log-list { display: flex; flex-direction: column; gap: 8px; }
   .log-item {
-    background: var(--bg3);
-    border-radius: 14px;
-    padding: 14px 16px;
+    background: var(--bg3); border-radius: 14px; padding: 14px 16px;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     animation: fadeSlide 0.25s ease;
   }
@@ -271,194 +198,68 @@
     to   { opacity: 1; transform: translateY(0); }
   }
   .log-info { flex: 1; min-width: 0; }
-  .log-note {
-    font-size: 14px; font-weight: 500; color: var(--sub);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .log-time { font-size: 12px; color: var(--sub2); margin-top: 2px; }
-  .log-cals {
-    font-family: 'DM Mono', monospace;
-    font-size: 18px; font-weight: 500; color: var(--green); white-space: nowrap; flex-shrink: 0;
-  }
-  .log-del {
-    background: none; border: none; color: var(--sub2);
-    cursor: pointer; padding: 4px; display: flex; align-items: center;
-    -webkit-tap-highlight-color: transparent; transition: color 0.15s;
-  }
+  .log-time { font-size: 13px; color: var(--sub); }
+  .log-cals { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: var(--green); white-space: nowrap; flex-shrink: 0; }
+  .log-del { background: none; border: none; color: var(--sub2); cursor: pointer; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; transition: color 0.15s; }
   .log-del:active { color: var(--danger); }
   .log-del svg { width: 16px; height: 16px; }
   .empty-state { text-align: center; color: var(--sub2); font-size: 14px; padding: 32px 0; }
 
-  /* ── MODAL ── */
+  /* ── CALORIE MODAL ── */
   #modal-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 200;
-    display: none; align-items: flex-end; justify-content: center;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 200; display: none; align-items: flex-end; justify-content: center;
     padding-bottom: var(--safe-bot);
   }
   #modal-overlay.open { display: flex; }
   #modal {
-    background: var(--bg2);
-    border-radius: 28px 28px 0 0;
-    border: 1px solid var(--border);
+    background: var(--bg2); border-radius: 28px 28px 0 0; border: 1px solid var(--border);
     width: 100%; max-width: 480px;
     padding: 28px 24px calc(24px + var(--safe-bot));
     animation: slideUp 0.3s cubic-bezier(.4,0,.2,1);
   }
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
-  }
-  .modal-handle {
-    width: 36px; height: 4px;
-    background: var(--border); border-radius: 2px;
-    margin: 0 auto 24px;
-  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 24px; }
   .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
-  .modal-date-badge {
-    font-size: 12px; color: var(--sub);
-    font-weight: 500; margin-bottom: 20px;
-    letter-spacing: 0.04em;
-  }
-  .field-label {
-    font-size: 12px; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--sub); margin-bottom: 8px; display: block;
-  }
-  .cal-input-wrap { position: relative; margin-bottom: 16px; }
+  .modal-date-badge { font-size: 12px; color: var(--sub); font-weight: 500; margin-bottom: 20px; letter-spacing: 0.04em; min-height: 18px; }
+  .field-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; display: block; }
+  .cal-input-wrap { position: relative; margin-bottom: 24px; }
   .cal-input {
-    width: 100%;
-    background: var(--bg3);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 32px; font-weight: 500;
-    padding: 16px 90px 16px 20px;
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
+    width: 100%; background: var(--bg3); border: 1.5px solid var(--border);
+    border-radius: 14px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500;
+    padding: 18px 100px 18px 20px; outline: none;
+    transition: border-color 0.2s; -webkit-appearance: none;
   }
   .cal-input:focus { border-color: var(--green); }
-  .cal-unit {
-    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-    font-size: 14px; font-weight: 600; color: var(--sub);
-    letter-spacing: 0.08em; text-transform: uppercase;
-  }
-  .note-input {
-    width: 100%;
-    background: var(--bg3);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    padding: 14px 18px;
-    outline: none; resize: none;
-    transition: border-color 0.2s;
-    margin-bottom: 20px;
-    -webkit-appearance: none;
-  }
-  .note-input:focus { border-color: var(--green); }
-  .note-input::placeholder { color: var(--sub2); }
+  .cal-unit { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: var(--sub); letter-spacing: 0.08em; text-transform: uppercase; }
   .modal-row { display: flex; gap: 10px; }
-  .btn-cancel {
-    flex: 1;
-    background: var(--bg3); border: 1.5px solid var(--border);
-    border-radius: 14px; color: var(--sub);
-    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
-    padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent;
-  }
-  .btn-track {
-    flex: 2;
-    background: var(--green); border: none;
-    border-radius: 14px; color: #000;
-    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
-    padding: 16px; cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: opacity 0.15s;
-    box-shadow: 0 4px 16px var(--green-glow);
-  }
-  .btn-track:active { opacity: 0.85; }
-  .quick-amounts { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .quick-amt {
-    background: var(--bg3); border: 1.5px solid var(--border);
-    border-radius: 10px; color: var(--sub);
-    font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500;
-    padding: 7px 14px; cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-  }
-  .quick-amt:active { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+  .btn-cancel { flex: 1; background: var(--bg3); border: 1.5px solid var(--border); border-radius: 14px; color: var(--sub); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn-primary { flex: 2; background: var(--green); border: none; border-radius: 14px; color: #000; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s; box-shadow: 0 4px 16px var(--green-glow); }
+  .btn-primary:active { opacity: 0.85; }
 
   /* ── HISTORY SCREEN ── */
   .screen-title { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 20px; }
-
   .stat-row { display: flex; gap: 10px; margin-bottom: 14px; }
-  .stat-card {
-    flex: 1; background: var(--card);
-    border-radius: 18px; border: 1px solid var(--border);
-    padding: 16px; text-align: center;
-  }
-  .stat-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 26px; font-weight: 500;
-    letter-spacing: -0.5px; color: var(--green);
-  }
-  .stat-lbl {
-    font-size: 11px; color: var(--sub);
-    font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; margin-top: 4px;
-  }
+  .stat-card { flex: 1; background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 16px; text-align: center; }
+  .stat-val { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500; letter-spacing: -0.5px; color: var(--green); }
+  .stat-lbl { font-size: 11px; color: var(--sub); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
 
-  /* bar chart */
-  #chart-card {
-    background: var(--card); border-radius: 20px;
-    border: 1px solid var(--border); padding: 20px; margin-bottom: 14px;
-  }
+  #chart-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
   #chart-card .card-label { margin-bottom: 16px; }
-  .chart-bars {
-    display: flex; align-items: flex-end; gap: 6px;
-    height: 100px; padding-bottom: 24px; position: relative;
-  }
-  .chart-bar-wrap {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; height: 100%; justify-content: flex-end; position: relative;
-  }
-  .chart-bar {
-    width: 100%; min-height: 3px;
-    background: var(--bg3); border-radius: 6px 6px 0 0;
-    position: relative; overflow: hidden;
-  }
-  .chart-bar-fill {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: var(--green); border-radius: 6px 6px 0 0;
-    opacity: 0.7;
-  }
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 100px; padding-bottom: 24px; position: relative; }
+  .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; position: relative; }
+  .chart-bar { width: 100%; min-height: 3px; background: var(--bg3); border-radius: 6px 6px 0 0; position: relative; overflow: hidden; }
+  .chart-bar-fill { position: absolute; bottom: 0; left: 0; right: 0; background: var(--green); border-radius: 6px 6px 0 0; opacity: 0.7; }
   .chart-bar-fill.this-week { opacity: 1; }
   .chart-bar-fill.today { opacity: 1; box-shadow: 0 0 10px var(--green-glow); }
   .chart-bar-fill.over { background: var(--danger); }
-  .chart-day {
-    position: absolute; bottom: 0;
-    font-size: 10px; color: var(--sub2);
-    font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  }
+  .chart-day { position: absolute; bottom: 0; font-size: 10px; color: var(--sub2); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
   .chart-day.today-lbl { color: var(--green); }
-  .chart-goal-line {
-    position: absolute; left: 0; right: 0;
-    border-top: 1px dashed var(--sub2); opacity: 0.4; pointer-events: none;
-  }
+  .chart-goal-line { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--sub2); opacity: 0.4; pointer-events: none; }
 
-  /* history day rows */
-  .hist-item {
-    background: var(--bg3); border-radius: 14px;
-    padding: 14px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 8px;
-  }
+  .hist-item { background: var(--bg3); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .hist-item.today-row { border: 1px solid rgba(74,222,128,0.2); }
   .hist-date { font-size: 14px; font-weight: 500; }
   .hist-sub  { font-size: 12px; color: var(--sub); margin-top: 2px; }
@@ -467,114 +268,143 @@
   .hist-cals.ok   { color: var(--green); }
   .hist-cals.empty { color: var(--sub2); font-size: 16px; }
 
-  /* ── SETTINGS ── */
-  .settings-label {
-    font-size: 12px; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--sub); margin-bottom: 8px; display: block; padding-left: 4px;
+  /* ── WEIGHT SCREEN ── */
+  .w-setup-msg { text-align: center; padding: 40px 20px; color: var(--sub); font-size: 15px; line-height: 1.6; }
+  .w-setup-msg strong { color: var(--text); display: block; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+
+  /* Goal card */
+  .wgoal-card {
+    background: var(--card); border-radius: 24px; border: 1px solid var(--border);
+    padding: 22px 20px; margin-bottom: 14px;
   }
-  .goal-input-wrap {
-    background: var(--card); border-radius: 18px;
-    border: 1px solid var(--border);
-    display: flex; align-items: center;
-    padding: 16px 18px; margin-bottom: 24px; gap: 12px;
-  }
-  .goal-input {
-    flex: 1; background: none; border: none;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 28px; font-weight: 500;
-    outline: none; -webkit-appearance: none;
-  }
-  .goal-unit { font-size: 14px; font-weight: 600; color: var(--sub); letter-spacing: 0.08em; }
-  .btn-save {
-    width: 100%; background: var(--green); border: none;
-    border-radius: 14px; color: #000;
+  .wgoal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+  .wgoal-current-lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin-bottom: 4px; }
+  .wgoal-current-val { font-family: 'DM Mono', monospace; font-size: 40px; font-weight: 500; letter-spacing: -1px; line-height: 1; }
+  .wgoal-current-unit { font-size: 16px; color: var(--sub); margin-left: 4px; }
+  .wgoal-goal-side { text-align: right; }
+  .wgoal-goal-lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin-bottom: 4px; }
+  .wgoal-goal-val { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: var(--green); }
+
+  /* progress bar */
+  .wgoal-bar-wrap { margin-bottom: 14px; }
+  .wgoal-bar-track { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+  .wgoal-bar-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width 0.6s cubic-bezier(.4,0,.2,1); box-shadow: 0 0 8px var(--green-glow); }
+  .wgoal-bar-labels { display: flex; justify-content: space-between; }
+  .wgoal-bar-lbl { font-size: 11px; color: var(--sub); font-weight: 500; }
+
+  .wgoal-motivation { font-size: 13px; color: var(--sub); font-style: italic; margin-bottom: 16px; text-align: center; }
+  .wgoal-motivation.achieved { color: var(--green); font-style: normal; font-weight: 600; }
+
+  .btn-update-weight {
+    width: 100%; background: var(--green); color: #000; border: none;
+    border-radius: 14px; padding: 15px;
     font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
-    padding: 16px; cursor: pointer; margin-bottom: 14px;
-    -webkit-tap-highlight-color: transparent;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
     box-shadow: 0 4px 16px var(--green-glow); transition: opacity 0.15s;
   }
+  .btn-update-weight:active { opacity: 0.85; }
+
+  /* weight stats row */
+  .w-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .w-stat-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 14px; text-align: center; }
+  .w-stat-val { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -0.5px; color: var(--green); }
+  .w-stat-val.neutral { color: var(--text); }
+  .w-stat-val.danger  { color: var(--danger); }
+  .w-stat-lbl { font-size: 11px; color: var(--sub); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
+
+  /* line chart */
+  .wchart-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
+  .wchart-card .card-label { margin-bottom: 14px; }
+  #weight-chart-svg { width: 100%; display: block; }
+
+  /* weigh-in log */
+  .wlog-item { background: var(--bg3); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .wlog-date { font-size: 14px; font-weight: 500; }
+  .wlog-sub  { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .wlog-val  { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--green); }
+  .wlog-del  { background: none; border: none; color: var(--sub2); cursor: pointer; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; transition: color 0.15s; margin-left: 10px; }
+  .wlog-del:active { color: var(--danger); }
+  .wlog-del svg { width: 16px; height: 16px; }
+
+  /* weight modal */
+  #wmodal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 200; display: none; align-items: flex-end; justify-content: center;
+    padding-bottom: var(--safe-bot);
+  }
+  #wmodal-overlay.open { display: flex; }
+  #wmodal {
+    background: var(--bg2); border-radius: 28px 28px 0 0; border: 1px solid var(--border);
+    width: 100%; max-width: 480px;
+    padding: 28px 24px calc(24px + var(--safe-bot));
+    animation: slideUp 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .w-input {
+    width: 100%; background: var(--bg3); border: 1.5px solid var(--border);
+    border-radius: 14px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500;
+    padding: 18px 100px 18px 20px; outline: none;
+    transition: border-color 0.2s; -webkit-appearance: none;
+    margin-bottom: 20px;
+  }
+  .w-input:focus { border-color: var(--green); }
+  .w-input-wrap { position: relative; }
+  .w-input-unit { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: var(--sub); letter-spacing: 0.08em; pointer-events: none; }
+  .w-date-input {
+    width: 100%; background: var(--bg3); border: 1.5px solid var(--border);
+    border-radius: 14px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    padding: 14px 18px; outline: none;
+    transition: border-color 0.2s; -webkit-appearance: none;
+    margin-bottom: 20px;
+    color-scheme: dark;
+  }
+  .w-date-input:focus { border-color: var(--green); }
+
+  /* ── SETTINGS SCREEN ── */
+  .settings-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; display: block; padding-left: 4px; }
+  .goal-input-wrap { background: var(--card); border-radius: 18px; border: 1px solid var(--border); display: flex; align-items: center; padding: 16px 18px; margin-bottom: 24px; gap: 12px; }
+  .goal-input { flex: 1; background: none; border: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; outline: none; -webkit-appearance: none; }
+  .goal-unit { font-size: 14px; font-weight: 600; color: var(--sub); letter-spacing: 0.08em; }
+  .btn-save { width: 100%; background: var(--green); border: none; border-radius: 14px; color: #000; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-bottom: 14px; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 16px var(--green-glow); transition: opacity 0.15s; }
   .btn-save:active { opacity: 0.85; }
   .divider { height: 1px; background: var(--border); margin: 24px 0; }
-  .btn-danger {
-    width: 100%;
-    background: rgba(248,113,113,0.1);
-    border: 1.5px solid rgba(248,113,113,0.25);
-    border-radius: 14px; color: var(--danger);
-    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
-    padding: 16px; cursor: pointer;
-    -webkit-tap-highlight-color: transparent; transition: background 0.15s;
-  }
+  .btn-danger { width: 100%; background: rgba(248,113,113,0.1); border: 1.5px solid rgba(248,113,113,0.25); border-radius: 14px; color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; padding: 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s; }
   .btn-danger:active { background: rgba(248,113,113,0.2); }
+  .settings-section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 16px; margin-top: 8px; }
   .app-info { text-align: center; color: var(--sub2); font-size: 12px; margin-top: 40px; letter-spacing: 0.04em; }
 
   /* ── TOAST ── */
-  #toast {
-    position: fixed; bottom: 100px; left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 12px; padding: 10px 20px;
-    font-size: 14px; font-weight: 500; color: var(--text);
-    z-index: 300; opacity: 0;
-    transition: opacity 0.2s, transform 0.2s;
-    white-space: nowrap; pointer-events: none;
-  }
+  #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text); z-index: 300; opacity: 0; transition: opacity 0.2s, transform 0.2s; white-space: nowrap; pointer-events: none; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ── CONFIRM ── */
-  #confirm-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    z-index: 400; display: none;
-    align-items: center; justify-content: center; padding: 24px;
-  }
+  #confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 400; display: none; align-items: center; justify-content: center; padding: 24px; }
   #confirm-overlay.open { display: flex; }
-  #confirm-box {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 24px; padding: 28px 24px;
-    width: 100%; max-width: 320px; text-align: center;
-  }
+  #confirm-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 24px; padding: 28px 24px; width: 100%; max-width: 320px; text-align: center; }
   .confirm-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .confirm-msg   { font-size: 14px; color: var(--sub); margin-bottom: 24px; line-height: 1.5; }
   .confirm-btns  { display: flex; gap: 10px; }
-  .confirm-cancel {
-    flex: 1; background: var(--bg3); border: 1.5px solid var(--border);
-    border-radius: 12px; color: var(--sub);
-    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-    padding: 13px; cursor: pointer;
-  }
-  .confirm-ok {
-    flex: 1; background: rgba(248,113,113,0.15);
-    border: 1.5px solid rgba(248,113,113,0.35);
-    border-radius: 12px; color: var(--danger);
-    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
-    padding: 13px; cursor: pointer;
-  }
+  .confirm-cancel { flex: 1; background: var(--bg3); border: 1.5px solid var(--border); border-radius: 12px; color: var(--sub); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 13px; cursor: pointer; }
+  .confirm-ok { flex: 1; background: rgba(248,113,113,0.15); border: 1.5px solid rgba(248,113,113,0.35); border-radius: 12px; color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; padding: 13px; cursor: pointer; }
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ── HOME / DAY VIEW ── -->
+  <!-- ── HOME ── -->
   <div id="screen-home" class="screen active">
-
-    <!-- Date nav -->
     <div class="date-nav">
       <button class="date-nav-arrow" id="home-prev" onclick="homeNavDay(-1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div class="date-nav-center">
         <div class="date-nav-title" id="home-title"></div>
         <div id="home-today-badge"></div>
       </div>
       <button class="date-nav-arrow" id="home-next" onclick="homeNavDay(1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
 
@@ -582,8 +412,7 @@
       <div class="ring-wrap">
         <svg id="ring-svg" viewBox="0 0 200 200">
           <circle class="ring-track" cx="100" cy="100" r="86"/>
-          <circle class="ring-fill" id="ring-path" cx="100" cy="100" r="86"
-            stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+          <circle class="ring-fill" id="ring-path" cx="100" cy="100" r="86" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
         </svg>
         <div class="ring-center">
           <div class="ring-remaining" id="ring-remaining">—</div>
@@ -591,29 +420,18 @@
         </div>
       </div>
       <div class="ring-stats">
-        <div class="ring-stat">
-          <div class="ring-stat-val" id="stat-goal">—</div>
-          <div class="ring-stat-lbl">Goal</div>
-        </div>
-        <div class="ring-stat">
-          <div class="ring-stat-val" id="stat-eaten">0</div>
-          <div class="ring-stat-lbl">Eaten</div>
-        </div>
-        <div class="ring-stat">
-          <div class="ring-stat-val" id="stat-pct">0%</div>
-          <div class="ring-stat-lbl">Done</div>
-        </div>
+        <div class="ring-stat"><div class="ring-stat-val" id="stat-goal">—</div><div class="ring-stat-lbl">Goal</div></div>
+        <div class="ring-stat"><div class="ring-stat-val" id="stat-eaten">0</div><div class="ring-stat-lbl">Eaten</div></div>
+        <div class="ring-stat"><div class="ring-stat-val" id="stat-pct">0%</div><div class="ring-stat-lbl">Done</div></div>
       </div>
     </div>
 
     <button id="add-btn" onclick="openModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="add-btn-label">Track Calories</span>
     </button>
 
-    <div class="card" id="log-card">
+    <div class="card" style="margin-top:14px;">
       <div class="card-label">Log</div>
       <div class="log-list" id="log-list"></div>
     </div>
@@ -622,58 +440,65 @@
   <!-- ── HISTORY ── -->
   <div id="screen-history" class="screen">
     <div class="screen-title">History</div>
-
-    <!-- Week nav -->
     <div class="date-nav">
       <button class="date-nav-arrow" id="hist-prev" onclick="histNavWeek(-1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div class="date-nav-center">
         <div class="date-nav-title" id="hist-week-title"></div>
         <div id="hist-this-week-badge"></div>
       </div>
       <button class="date-nav-arrow" id="hist-next" onclick="histNavWeek(1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
-
-    <!-- Weekly avg -->
     <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-val" id="avg-week">—</div>
-        <div class="stat-lbl">Weekly Avg</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="week-total">—</div>
-        <div class="stat-lbl">Week Total</div>
-      </div>
+      <div class="stat-card"><div class="stat-val" id="avg-week">—</div><div class="stat-lbl">Weekly Avg</div></div>
+      <div class="stat-card"><div class="stat-val" id="week-total">—</div><div class="stat-lbl">Week Total</div></div>
     </div>
-
-    <!-- Bar chart -->
     <div id="chart-card">
       <div class="card-label">Sun → Sat</div>
       <div class="chart-bars" id="chart-bars"></div>
     </div>
-
-    <!-- Daily list for week -->
     <div class="card-label" style="padding-left:4px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:8px;">Daily Breakdown</div>
     <div id="hist-list"></div>
+  </div>
+
+  <!-- ── WEIGHT ── -->
+  <div id="screen-weight" class="screen">
+    <div class="screen-title">Weight</div>
+    <div id="weight-content"></div>
   </div>
 
   <!-- ── SETTINGS ── -->
   <div id="screen-settings" class="screen">
     <div class="screen-title">Settings</div>
+
+    <div class="settings-section-title">Calories</div>
     <label class="settings-label">Daily Calorie Goal</label>
     <div class="goal-input-wrap">
       <input class="goal-input" id="goal-input" type="number" inputmode="numeric" pattern="[0-9]*" min="100" max="99999" placeholder="2000">
       <span class="goal-unit">kcal</span>
     </div>
-    <button class="btn-save" onclick="saveGoal()">Save Goal</button>
+    <button class="btn-save" onclick="saveGoal()">Save Calorie Goal</button>
+
     <div class="divider"></div>
+
+    <div class="settings-section-title">Weight</div>
+    <label class="settings-label">Starting Weight</label>
+    <div class="goal-input-wrap">
+      <input class="goal-input" id="wstart-input" type="number" inputmode="decimal" placeholder="180">
+      <span class="goal-unit">lbs</span>
+    </div>
+    <label class="settings-label">Goal Weight</label>
+    <div class="goal-input-wrap">
+      <input class="goal-input" id="wgoal-input" type="number" inputmode="decimal" placeholder="160">
+      <span class="goal-unit">lbs</span>
+    </div>
+    <button class="btn-save" onclick="saveWeightSettings()">Save Weight Settings</button>
+
+    <div class="divider"></div>
+
     <label class="settings-label">Data</label>
     <button class="btn-danger" onclick="confirmClear()">Clear All Data</button>
     <div class="app-info">Calories · Local storage only<br>No accounts · No tracking</div>
@@ -681,54 +506,60 @@
 
 </div><!-- /app -->
 
-<!-- ── BOTTOM NAV ── -->
+<!-- ── NAV ── -->
 <nav id="nav">
   <button class="nav-btn active" id="nav-home" onclick="showScreen('home')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-      <path d="M9 21V12h6v9"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
     Today
   </button>
   <button class="nav-btn" id="nav-history" onclick="showScreen('history')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="4" width="18" height="18" rx="3"/>
-      <path d="M8 9h8M8 13h5M8 17h3"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M8 9h8M8 13h5M8 17h3"/></svg>
     History
   </button>
+  <button class="nav-btn" id="nav-weight" onclick="showScreen('weight')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18" opacity="0.3"/><polyline points="7 20 12 4 17 20"/></svg>
+    Weight
+  </button>
   <button class="nav-btn" id="nav-settings" onclick="showScreen('settings')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     Settings
   </button>
 </nav>
 
-<!-- ── TRACK MODAL ── -->
+<!-- ── CALORIE MODAL ── -->
 <div id="modal-overlay" onclick="handleOverlayClick(event)">
   <div id="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Track Calories</div>
     <div class="modal-date-badge" id="modal-date-badge"></div>
-    <label class="field-label">Amount</label>
+    <label class="field-label">Calories</label>
     <div class="cal-input-wrap">
-      <input class="cal-input" id="cal-input" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="9999" placeholder="0">
+      <input class="cal-input" id="cal-input" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="99999" placeholder="0">
       <span class="cal-unit">kcal</span>
     </div>
-    <div class="quick-amounts">
-      <button class="quick-amt" onclick="setQuick(100)">100</button>
-      <button class="quick-amt" onclick="setQuick(200)">200</button>
-      <button class="quick-amt" onclick="setQuick(300)">300</button>
-      <button class="quick-amt" onclick="setQuick(500)">500</button>
-      <button class="quick-amt" onclick="setQuick(750)">750</button>
-    </div>
-    <label class="field-label">Note (optional)</label>
-    <textarea class="note-input" id="note-input" rows="2" placeholder="e.g. Lunch, Snack…"></textarea>
     <div class="modal-row">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-track" onclick="trackEntry()">Track</button>
+      <button class="btn-primary" onclick="trackEntry()">Track</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── WEIGHT MODAL ── -->
+<div id="wmodal-overlay" onclick="handleWOverlayClick(event)">
+  <div id="wmodal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log Weight</div>
+    <div style="font-size:12px;color:var(--sub);margin-bottom:20px;">Enter your current weight</div>
+    <label class="field-label">Weight</label>
+    <div class="w-input-wrap">
+      <input class="w-input" id="weight-input" type="number" inputmode="decimal" placeholder="175.0">
+      <span class="w-input-unit">lbs</span>
+    </div>
+    <label class="field-label">Date</label>
+    <input class="w-date-input" id="weight-date-input" type="date">
+    <div class="modal-row">
+      <button class="btn-cancel" onclick="closeWModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveWeighIn()">Save</button>
     </div>
   </div>
 </div>
@@ -737,7 +568,7 @@
 <div id="confirm-overlay">
   <div id="confirm-box">
     <div class="confirm-title">Clear All Data?</div>
-    <div class="confirm-msg">This will permanently delete all calorie entries and reset your goal. This cannot be undone.</div>
+    <div class="confirm-msg">This will permanently delete all calorie entries, weigh-ins, and reset all goals. This cannot be undone.</div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
       <button class="confirm-ok" onclick="clearAllData()">Delete</button>
@@ -748,79 +579,57 @@
 <div id="toast"></div>
 
 <script>
-// ── STORAGE ──
-const KEY_GOAL    = 'cal_goal';
-const KEY_ENTRIES = 'cal_entries';
+// ── STORAGE KEYS ──
+const KEY_GOAL        = 'cal_goal';
+const KEY_ENTRIES     = 'cal_entries';
+const KEY_WEIGHINS    = 'w_weighins';    // [{date,weight}]
+const KEY_WSTART      = 'w_start';       // number
+const KEY_WGOAL       = 'w_goal';        // number
 
-let goal    = parseInt(localStorage.getItem(KEY_GOAL)) || 2000;
-let entries = JSON.parse(localStorage.getItem(KEY_ENTRIES) || '[]');
+// ── STATE ──
+let goal       = parseInt(localStorage.getItem(KEY_GOAL)) || 2000;
+let entries    = JSON.parse(localStorage.getItem(KEY_ENTRIES) || '[]');
+let weighIns   = JSON.parse(localStorage.getItem(KEY_WEIGHINS) || '[]');
+let wStart     = parseFloat(localStorage.getItem(KEY_WSTART)) || 0;
+let wGoal      = parseFloat(localStorage.getItem(KEY_WGOAL))  || 0;
+
+let homeDayOffset  = 0;
+let histWeekOffset = 0;
 
 // ── DATE UTILS ──
 function dateStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function todayStr() { return dateStr(new Date()); }
-
-// offset from today: 0=today, -1=yesterday, etc.
-// We store the offset as a number relative to today's date
-let homeDayOffset = 0; // 0 = today
-
-function dateForOffset(offset) {
-  const d = new Date();
-  d.setDate(d.getDate() + offset);
-  return d;
-}
-function strForOffset(offset) {
-  return dateStr(dateForOffset(offset));
-}
-
-// Week helpers — weeks are Sun-Sat
-// weekOffset: 0 = current week, -1 = last week, etc.
-let histWeekOffset = 0;
+function dateForOffset(offset) { const d = new Date(); d.setDate(d.getDate() + offset); return d; }
+function strForOffset(offset)  { return dateStr(dateForOffset(offset)); }
 
 function getWeekSunday(weekOffset) {
-  // Get the Sunday of the current week, shifted by weekOffset weeks
-  const now = new Date();
-  const dayOfWeek = now.getDay(); // 0=Sun
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() - dayOfWeek + weekOffset * 7);
-  sunday.setHours(0,0,0,0);
-  return sunday;
+  const now = new Date(); const dow = now.getDay();
+  const sun = new Date(now); sun.setDate(now.getDate() - dow + weekOffset * 7); sun.setHours(0,0,0,0);
+  return sun;
 }
-
 function getWeekDays(weekOffset) {
-  // Returns array of 7 Date objects Sun–Sat for the given week offset
   const sun = getWeekSunday(weekOffset);
-  return Array.from({length:7}, (_,i) => {
-    const d = new Date(sun);
-    d.setDate(sun.getDate() + i);
-    return d;
-  });
+  return Array.from({length:7}, (_,i) => { const d = new Date(sun); d.setDate(sun.getDate()+i); return d; });
 }
 
-function fmtShortDate(d) {
-  return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-}
-function fmtLongDate(d) {
-  return d.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
-}
-function fmtTime(ts) {
-  return new Date(ts).toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
-}
-function dayAbbr(d) {
-  return d.toLocaleDateString('en-US', {weekday:'short'}).slice(0,2).toUpperCase();
-}
+function fmtShortDate(d) { return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function fmtLongDate(d)  { return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
+function fmtTime(ts)     { return new Date(ts).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
+function dayAbbr(d)      { return d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,2).toUpperCase(); }
+function fmtDateStr(s)   { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
 
-function saveEntries() { localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries)); }
-function saveGoalData() { localStorage.setItem(KEY_GOAL, String(goal)); }
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function saveEntries()  { localStorage.setItem(KEY_ENTRIES,  JSON.stringify(entries)); }
+function saveGoalData() { localStorage.setItem(KEY_GOAL,     String(goal)); }
+function saveWeighIns() { localStorage.setItem(KEY_WEIGHINS, JSON.stringify(weighIns)); }
+function saveWSettings(){ localStorage.setItem(KEY_WSTART,   String(wStart)); localStorage.setItem(KEY_WGOAL, String(wGoal)); }
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
 }
 
@@ -832,14 +641,15 @@ function showScreen(name) {
   document.getElementById('nav-'+name).classList.add('active');
   if (name === 'home')     renderHome();
   if (name === 'history')  renderHistory();
+  if (name === 'weight')   renderWeight();
   if (name === 'settings') renderSettings();
 }
 
-// ── HOME / DAY NAV ──
+// ── HOME ──
 function homeNavDay(dir) {
-  const newOffset = homeDayOffset + dir;
-  if (newOffset > 0) return; // can't go to future
-  homeDayOffset = newOffset;
+  const n = homeDayOffset + dir;
+  if (n > 0) return;
+  homeDayOffset = n;
   renderHome();
 }
 
@@ -848,34 +658,22 @@ function renderHome() {
   const viewStr  = strForOffset(homeDayOffset);
   const isToday  = homeDayOffset === 0;
 
-  // Header
   const titleEl = document.getElementById('home-title');
-  if (isToday) {
-    titleEl.textContent = 'Today';
-  } else if (homeDayOffset === -1) {
-    titleEl.textContent = 'Yesterday';
-  } else {
-    titleEl.textContent = fmtLongDate(viewDate);
-  }
+  titleEl.textContent = isToday ? 'Today' : homeDayOffset === -1 ? 'Yesterday' : fmtLongDate(viewDate);
 
   const badge = document.getElementById('home-today-badge');
-  if (isToday) {
-    badge.innerHTML = `<span class="date-nav-today-badge">${viewDate.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`;
-  } else {
-    badge.innerHTML = `<div class="date-nav-sub">${fmtShortDate(viewDate)}</div>`;
-  }
+  badge.innerHTML = isToday
+    ? `<span class="date-nav-today-badge">${viewDate.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`
+    : `<div class="date-nav-sub">${fmtShortDate(viewDate)}</div>`;
 
-  // Next arrow: disabled if today
   document.getElementById('home-next').disabled = isToday;
 
-  // Entries for this day
   const dayEntries = entries.filter(e => e.date === viewStr);
   const eaten = dayEntries.reduce((s,e) => s + e.cals, 0);
   const remaining = goal - eaten;
   const pct  = Math.min(eaten / goal, 1);
   const over = eaten > goal;
 
-  // Ring
   const circ = 540.35;
   const ring = document.getElementById('ring-path');
   ring.style.strokeDashoffset = circ - pct * circ;
@@ -885,40 +683,27 @@ function renderHome() {
   remEl.textContent = Math.abs(remaining).toLocaleString();
   remEl.classList.toggle('over', over);
 
-  document.getElementById('ring-lbl').textContent = over ? 'kcal over goal' : 'kcal remaining';
-  document.getElementById('stat-goal').textContent  = goal.toLocaleString();
-  document.getElementById('stat-eaten').textContent = eaten.toLocaleString();
-  document.getElementById('stat-pct').textContent   = Math.round(pct * 100) + '%';
+  document.getElementById('ring-lbl').textContent    = over ? 'kcal over goal' : 'kcal remaining';
+  document.getElementById('stat-goal').textContent   = goal.toLocaleString();
+  document.getElementById('stat-eaten').textContent  = eaten.toLocaleString();
+  document.getElementById('stat-pct').textContent    = Math.round(pct * 100) + '%';
 
-  // Add button
   const addBtn = document.getElementById('add-btn');
   const addLbl = document.getElementById('add-btn-label');
-  if (isToday) {
-    addBtn.classList.remove('past');
-    addLbl.textContent = 'Track Calories';
-  } else {
-    addBtn.classList.add('past');
-    addLbl.textContent = 'Add Entry for This Day';
-  }
+  addBtn.classList.toggle('past', !isToday);
+  addLbl.textContent = isToday ? 'Track Calories' : 'Add Entry for This Day';
 
-  // Log list
   const list = document.getElementById('log-list');
   if (dayEntries.length === 0) {
     list.innerHTML = `<div class="empty-state">No entries for this day</div>`;
   } else {
     list.innerHTML = [...dayEntries].reverse().map(e => `
       <div class="log-item" id="entry-${e.id}">
-        <div class="log-info">
-          ${e.note ? `<div class="log-note">${escHtml(e.note)}</div>` : ''}
-          <div class="log-time">${fmtTime(e.ts)}</div>
-        </div>
+        <div class="log-info"><div class="log-time">${fmtTime(e.ts)}</div></div>
         <div class="log-cals">+${e.cals.toLocaleString()}</div>
         <button class="log-del" onclick="deleteEntry('${e.id}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14H6L5 6"/>
-            <path d="M10 11v6M14 11v6"/>
-            <path d="M9 6V4h6v2"/>
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
           </svg>
         </button>
       </div>`).join('');
@@ -927,32 +712,21 @@ function renderHome() {
 
 function deleteEntry(id) {
   entries = entries.filter(e => e.id !== id);
-  saveEntries();
-  renderHome();
+  saveEntries(); renderHome();
 }
 
-// ── MODAL ──
+// ── CALORIE MODAL ──
 function openModal() {
   document.getElementById('cal-input').value = '';
-  document.getElementById('note-input').value = '';
-  // show which day we're adding to
-  const viewDate = dateForOffset(homeDayOffset);
   const isToday = homeDayOffset === 0;
   document.getElementById('modal-date-badge').textContent =
-    isToday ? '' : `Adding to ${fmtLongDate(viewDate)}`;
+    isToday ? '' : `Adding to ${fmtLongDate(dateForOffset(homeDayOffset))}`;
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('cal-input').focus(), 350);
 }
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-function setQuick(v) {
-  document.getElementById('cal-input').value = v;
-  document.getElementById('cal-input').focus();
-}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
+
 function trackEntry() {
   const raw  = document.getElementById('cal-input').value.trim();
   const cals = parseInt(raw);
@@ -961,159 +735,375 @@ function trackEntry() {
     setTimeout(() => document.getElementById('cal-input').style.borderColor = '', 800);
     return;
   }
-  const note = document.getElementById('note-input').value.trim();
-  // Use the currently-viewed date, but timestamp as now
-  const viewStr = strForOffset(homeDayOffset);
-  const entry = {
-    id:   Date.now().toString(36) + Math.random().toString(36).slice(2,5),
-    date: viewStr,
-    cals,
-    note,
-    ts:   Date.now()
-  };
-  entries.push(entry);
-  saveEntries();
-  closeModal();
-  renderHome();
+  entries.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,5), date: strForOffset(homeDayOffset), cals, ts: Date.now() });
+  saveEntries(); closeModal(); renderHome();
   toast(`+${cals.toLocaleString()} kcal tracked`);
 }
 
-// ── HISTORY / WEEK NAV ──
+// ── HISTORY ──
 function histNavWeek(dir) {
-  const newOffset = histWeekOffset + dir;
-  if (newOffset > 0) return; // can't go to future weeks
-  histWeekOffset = newOffset;
-  renderHistory();
+  const n = histWeekOffset + dir;
+  if (n > 0) return;
+  histWeekOffset = n; renderHistory();
 }
 
 function renderHistory() {
   const days = getWeekDays(histWeekOffset);
-  const sun  = days[0];
-  const sat  = days[6];
   const isThisWeek = histWeekOffset === 0;
   const today = todayStr();
 
-  // Week title
-  const titleEl = document.getElementById('hist-week-title');
-  titleEl.textContent = `${fmtShortDate(sun)} – ${fmtShortDate(sat)}`;
-
-  const badge = document.getElementById('hist-this-week-badge');
-  badge.innerHTML = isThisWeek
-    ? '<span class="date-nav-today-badge">This Week</span>'
-    : '';
-
-  // Disable next if already on current week
+  document.getElementById('hist-week-title').textContent = `${fmtShortDate(days[0])} – ${fmtShortDate(days[6])}`;
+  document.getElementById('hist-this-week-badge').innerHTML = isThisWeek ? '<span class="date-nav-today-badge">This Week</span>' : '';
   document.getElementById('hist-next').disabled = isThisWeek;
 
-  // Build day map for this week
   const dayMap = {};
-  entries.forEach(e => { dayMap[e.date] = (dayMap[e.date] || 0) + e.cals; });
+  entries.forEach(e => { dayMap[e.date] = (dayMap[e.date]||0) + e.cals; });
 
-  const weekData = days.map(d => ({
-    d,
-    str: dateStr(d),
-    cals: dayMap[dateStr(d)] || 0,
-    isToday: dateStr(d) === today,
-    isFuture: d > new Date()
-  }));
+  const weekData = days.map(d => ({ d, str: dateStr(d), cals: dayMap[dateStr(d)]||0, isToday: dateStr(d)===today, isFuture: d > new Date() }));
 
-  // Weekly avg & total (only count days that are not future and have been tracked or are past)
   const trackedDays = weekData.filter(d => !d.isFuture && d.cals > 0);
-  const weekTotal   = weekData.filter(d => !d.isFuture).reduce((s,d) => s + d.cals, 0);
-  // avg over days that have data
-  const avgVal = trackedDays.length
-    ? Math.round(trackedDays.reduce((s,d) => s + d.cals, 0) / trackedDays.length)
-    : 0;
+  const weekTotal   = weekData.filter(d => !d.isFuture).reduce((s,d)=>s+d.cals,0);
+  const avgVal      = trackedDays.length ? Math.round(trackedDays.reduce((s,d)=>s+d.cals,0)/trackedDays.length) : 0;
 
   document.getElementById('avg-week').textContent  = trackedDays.length ? avgVal.toLocaleString() : '—';
   document.getElementById('week-total').textContent = weekTotal > 0 ? weekTotal.toLocaleString() : '—';
 
-  // Chart
-  const barsEl = document.getElementById('chart-bars');
-  const maxCals = Math.max(...weekData.map(d => d.cals), goal, 1);
-  const goalPct = (goal / maxCals) * 100;
+  const barsEl  = document.getElementById('chart-bars');
+  const maxCals = Math.max(...weekData.map(d=>d.cals), goal, 1);
+  const goalPct = (goal/maxCals)*100;
 
-  barsEl.innerHTML =
-    `<div class="chart-goal-line" style="bottom:calc(${goalPct}% + 24px)"></div>` +
+  barsEl.innerHTML = `<div class="chart-goal-line" style="bottom:calc(${goalPct}% + 24px)"></div>` +
     weekData.map(d => {
-      const h = d.isFuture ? 0 : Math.max((d.cals / maxCals) * 100, d.cals > 0 ? 4 : 0);
+      const h   = d.isFuture ? 0 : Math.max((d.cals/maxCals)*100, d.cals>0?4:0);
       const over = d.cals > goal && d.cals > 0;
-      const cls = [
-        isThisWeek && d.isToday ? 'today' : '',
-        isThisWeek ? 'this-week' : '',
-        over ? 'over' : ''
-      ].join(' ').trim();
+      const cls  = [isThisWeek&&d.isToday?'today':'', isThisWeek?'this-week':'', over?'over':''].join(' ').trim();
       return `<div class="chart-bar-wrap">
-        <div class="chart-bar" style="height:100%">
-          <div class="chart-bar-fill ${cls}" style="height:${h}%"></div>
-        </div>
-        <span class="chart-day ${d.isToday && isThisWeek ? 'today-lbl' : ''}">${dayAbbr(d.d)}</span>
+        <div class="chart-bar" style="height:100%"><div class="chart-bar-fill ${cls}" style="height:${h}%"></div></div>
+        <span class="chart-day ${d.isToday&&isThisWeek?'today-lbl':''}">${dayAbbr(d.d)}</span>
       </div>`;
     }).join('');
 
-  // Daily list
-  const histEl = document.getElementById('hist-list');
-  histEl.innerHTML = weekData.map(d => {
-    const label = d.isToday ? 'Today'
-      : d.d.toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'});
-    const isFutureDay = d.isFuture && !d.isToday;
-    if (isFutureDay) return ''; // don't show future days
-    const over = d.cals > goal && d.cals > 0;
-    const diff = d.cals - goal;
-    const diffStr = d.cals === 0
-      ? 'No entries'
-      : diff > 0
-        ? `+${diff.toLocaleString()} over goal`
-        : `${Math.abs(diff).toLocaleString()} under goal`;
-    return `<div class="hist-item ${d.isToday && isThisWeek ? 'today-row' : ''}">
-      <div>
-        <div class="hist-date">${label}</div>
-        <div class="hist-sub">${diffStr}</div>
-      </div>
-      <div class="hist-cals ${d.cals === 0 ? 'empty' : over ? 'over' : 'ok'}">
-        ${d.cals === 0 ? '—' : d.cals.toLocaleString()}
-      </div>
+  document.getElementById('hist-list').innerHTML = weekData.map(d => {
+    if (d.isFuture && !d.isToday) return '';
+    const label = d.isToday ? 'Today' : d.d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+    const over  = d.cals > goal && d.cals > 0;
+    const diff  = d.cals - goal;
+    const diffStr = d.cals===0 ? 'No entries' : diff>0 ? `+${diff.toLocaleString()} over goal` : `${Math.abs(diff).toLocaleString()} under goal`;
+    return `<div class="hist-item ${d.isToday&&isThisWeek?'today-row':''}">
+      <div><div class="hist-date">${label}</div><div class="hist-sub">${diffStr}</div></div>
+      <div class="hist-cals ${d.cals===0?'empty':over?'over':'ok'}">${d.cals===0?'—':d.cals.toLocaleString()}</div>
     </div>`;
   }).join('');
 }
 
+// ── WEIGHT ──
+function openWModal() {
+  document.getElementById('weight-input').value = '';
+  document.getElementById('weight-date-input').value = todayStr();
+  document.getElementById('wmodal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('weight-input').focus(), 350);
+}
+function closeWModal() { document.getElementById('wmodal-overlay').classList.remove('open'); }
+function handleWOverlayClick(e) { if (e.target === document.getElementById('wmodal-overlay')) closeWModal(); }
+
+function saveWeighIn() {
+  const raw = document.getElementById('weight-input').value.trim();
+  const w   = parseFloat(raw);
+  if (!raw || isNaN(w) || w <= 0) {
+    document.getElementById('weight-input').style.borderColor = 'var(--danger)';
+    setTimeout(() => document.getElementById('weight-input').style.borderColor = '', 800);
+    return;
+  }
+  const date = document.getElementById('weight-date-input').value || todayStr();
+  // Replace if same date exists, otherwise add
+  const idx = weighIns.findIndex(x => x.date === date);
+  if (idx >= 0) weighIns[idx].weight = w;
+  else weighIns.push({ date, weight: w });
+  weighIns.sort((a,b) => a.date.localeCompare(b.date));
+  saveWeighIns(); closeWModal(); renderWeight();
+  toast(`Weight logged: ${w} lbs`);
+}
+
+function deleteWeighIn(date) {
+  weighIns = weighIns.filter(x => x.date !== date);
+  saveWeighIns(); renderWeight();
+}
+
+function renderWeight() {
+  const container = document.getElementById('weight-content');
+
+  // Need at least wStart and wGoal set
+  const hasSetup = wStart > 0 && wGoal > 0;
+
+  if (!hasSetup) {
+    container.innerHTML = `
+      <div class="w-setup-msg">
+        <strong>Set up Weight Tracking</strong>
+        Go to Settings to enter your starting weight and goal weight to get started.
+      </div>
+      <button class="btn-update-weight" onclick="showScreen('settings')" style="margin-bottom:14px;">Go to Settings</button>`;
+    return;
+  }
+
+  const sorted = [...weighIns].sort((a,b)=>a.date.localeCompare(b.date));
+  const latest = sorted.length ? sorted[sorted.length-1] : null;
+  const currentW = latest ? latest.weight : wStart;
+  const isLoss   = wGoal < wStart; // trying to lose weight
+  const totalDiff = Math.abs(wStart - wGoal);
+
+  // Progress: 0→1 toward goal
+  let progress = 0;
+  if (totalDiff > 0) {
+    const moved = isLoss ? (wStart - currentW) : (currentW - wStart);
+    progress = Math.min(Math.max(moved / totalDiff, 0), 1);
+  }
+  const pct = Math.round(progress * 100);
+  const achieved = progress >= 1;
+
+  // Motivation text
+  const motivations = [
+    "Keep going, you've got this!",
+    "Every day counts. Stay consistent.",
+    "Small steps lead to big changes.",
+    "You're doing great — keep it up!",
+    "Progress, not perfection."
+  ];
+  const motiv = achieved ? "🎉 Goal reached! Amazing work!" : motivations[Math.floor(progress * (motivations.length-1))];
+
+  // Stats
+  const remaining = Math.abs(wGoal - currentW).toFixed(1);
+  const totalChange = (currentW - wStart).toFixed(1);
+  const changeSign  = totalChange > 0 ? '+' : '';
+
+  // Weekly avg change
+  let weeklyAvg = null;
+  if (sorted.length >= 2) {
+    const first = sorted[0]; const last = sorted[sorted.length-1];
+    const dayDiff = (new Date(last.date) - new Date(first.date)) / (1000*60*60*24);
+    if (dayDiff >= 7) {
+      const totalChg = last.weight - first.weight;
+      weeklyAvg = ((totalChg / dayDiff) * 7).toFixed(1);
+    }
+  }
+
+  // Build HTML
+  let html = `
+    <div class="wgoal-card">
+      <div class="wgoal-top">
+        <div>
+          <div class="wgoal-current-lbl">Current</div>
+          <div style="display:flex;align-items:baseline;gap:2px;">
+            <div class="wgoal-current-val">${currentW.toFixed(1)}</div>
+            <div class="wgoal-current-unit">lbs</div>
+          </div>
+        </div>
+        <div class="wgoal-goal-side">
+          <div class="wgoal-goal-lbl">Goal</div>
+          <div class="wgoal-goal-val">${wGoal.toFixed(1)} lbs</div>
+        </div>
+      </div>
+      <div class="wgoal-bar-wrap">
+        <div class="wgoal-bar-track"><div class="wgoal-bar-fill" style="width:${pct}%"></div></div>
+        <div class="wgoal-bar-labels">
+          <span class="wgoal-bar-lbl">${wStart.toFixed(1)}</span>
+          <span class="wgoal-bar-lbl" style="color:var(--green)">${pct}%</span>
+          <span class="wgoal-bar-lbl">${wGoal.toFixed(1)}</span>
+        </div>
+      </div>
+      <div class="wgoal-motivation ${achieved?'achieved':''}">${motiv}</div>
+      <button class="btn-update-weight" onclick="openWModal()">+ Log Weight</button>
+    </div>
+
+    <div class="w-stats-row">
+      <div class="w-stat-card">
+        <div class="w-stat-val neutral">${currentW.toFixed(1)}</div>
+        <div class="w-stat-lbl">Current</div>
+      </div>
+      <div class="w-stat-card">
+        <div class="w-stat-val">${wGoal.toFixed(1)}</div>
+        <div class="w-stat-lbl">Goal</div>
+      </div>
+      <div class="w-stat-card">
+        <div class="w-stat-val ${achieved?'':'neutral'}">${achieved ? '✓ Done' : remaining+' lbs'}</div>
+        <div class="w-stat-lbl">Remaining</div>
+      </div>
+      <div class="w-stat-card">
+        <div class="w-stat-val ${parseFloat(totalChange)===0?'neutral': (isLoss&&parseFloat(totalChange)<0)||(!isLoss&&parseFloat(totalChange)>0) ?'':'danger'}">${changeSign}${totalChange}</div>
+        <div class="w-stat-lbl">Total Change</div>
+      </div>
+      ${weeklyAvg !== null ? `
+      <div class="w-stat-card" style="grid-column:span 2">
+        <div class="w-stat-val neutral">${parseFloat(weeklyAvg)>0?'+':''}${weeklyAvg} lbs</div>
+        <div class="w-stat-lbl">Avg / Week</div>
+      </div>` : ''}
+    </div>`;
+
+  // Line chart
+  if (sorted.length >= 1) {
+    html += `<div class="wchart-card"><div class="card-label">Progress Chart</div><svg id="weight-chart-svg" viewBox="0 0 320 160" preserveAspectRatio="xMidYMid meet"></svg></div>`;
+  }
+
+  // Log
+  if (sorted.length > 0) {
+    html += `<div class="card-label" style="padding-left:4px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:8px;">Weigh-in Log</div>`;
+    html += [...sorted].reverse().map((w,i) => {
+      const isLatest = i === 0;
+      const prev = sorted[sorted.length - 1 - i - 1];
+      let changeStr = '';
+      if (prev) {
+        const diff = (w.weight - prev.weight).toFixed(1);
+        changeStr = `${parseFloat(diff)>0?'+':''}${diff} lbs`;
+      }
+      return `<div class="wlog-item">
+        <div>
+          <div class="wlog-date">${fmtDateStr(w.date)}${isLatest?' <span style="color:var(--green);font-size:11px;margin-left:6px;">LATEST</span>':''}</div>
+          ${changeStr ? `<div class="wlog-sub">${changeStr} from previous</div>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;">
+          <div class="wlog-val">${w.weight.toFixed(1)}</div>
+          <button class="wlog-del" onclick="deleteWeighIn('${w.date}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+            </svg>
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  container.innerHTML = html;
+
+  // Draw SVG chart if we have data
+  if (sorted.length >= 1) {
+    drawWeightChart(sorted);
+  }
+}
+
+function drawWeightChart(sorted) {
+  const svg = document.getElementById('weight-chart-svg');
+  if (!svg) return;
+
+  const W = 320, H = 160, PAD = { t:20, r:20, b:30, l:44 };
+  const cW = W - PAD.l - PAD.r;
+  const cH = H - PAD.t - PAD.b;
+
+  // value range: include goal and start
+  const allVals = sorted.map(x=>x.weight).concat([wGoal, wStart]);
+  let minV = Math.min(...allVals);
+  let maxV = Math.max(...allVals);
+  const pad = Math.max((maxV - minV) * 0.15, 2);
+  minV -= pad; maxV += pad;
+
+  const xScale = i => sorted.length === 1 ? PAD.l + cW/2 : PAD.l + (i/(sorted.length-1)) * cW;
+  const yScale = v => PAD.t + cH - ((v - minV)/(maxV - minV)) * cH;
+
+  // grid lines
+  const numGridLines = 4;
+  let gridHTML = '';
+  for (let i = 0; i <= numGridLines; i++) {
+    const v   = minV + (maxV - minV) * (i / numGridLines);
+    const y   = yScale(v);
+    const lbl = v.toFixed(0);
+    gridHTML += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="#2a2a2a" stroke-width="1"/>`;
+    gridHTML += `<text x="${PAD.l - 6}" y="${y + 4}" font-size="9" fill="#555" text-anchor="end" font-family="DM Mono,monospace">${lbl}</text>`;
+  }
+
+  // goal line
+  const goalY = yScale(wGoal);
+  gridHTML += `<line x1="${PAD.l}" y1="${goalY}" x2="${W-PAD.r}" y2="${goalY}" stroke="#4ade80" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>`;
+  gridHTML += `<text x="${W-PAD.r+4}" y="${goalY+4}" font-size="9" fill="#4ade80" font-family="DM Mono,monospace">Goal</text>`;
+
+  // line path
+  let pathD = sorted.map((pt,i) => `${i===0?'M':'L'}${xScale(i).toFixed(1)},${yScale(pt.weight).toFixed(1)}`).join(' ');
+
+  // area fill
+  const areaD = pathD + ` L${xScale(sorted.length-1).toFixed(1)},${(PAD.t+cH).toFixed(1)} L${PAD.l.toFixed(1)},${(PAD.t+cH).toFixed(1)} Z`;
+
+  // dots
+  let dotsHTML = sorted.map((pt,i) => {
+    const x = xScale(i), y = yScale(pt.weight);
+    const isLatest = i === sorted.length - 1;
+    const isFirst  = i === 0;
+    const r = isLatest ? 5 : 3.5;
+    const fill = isLatest ? '#4ade80' : '#2a2a2a';
+    const stroke = '#4ade80';
+    let lbl = '';
+    if (isLatest || isFirst || sorted.length <= 4) {
+      const above = y > PAD.t + 20;
+      lbl = `<text x="${x}" y="${above ? y-9 : y+16}" font-size="9" fill="${isLatest?'#4ade80':'#888'}" text-anchor="middle" font-family="DM Mono,monospace" font-weight="${isLatest?'500':'400'}">${pt.weight.toFixed(1)}</text>`;
+    }
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>${lbl}`;
+  }).join('');
+
+  // x-axis date labels (first and last only)
+  let xLabels = '';
+  if (sorted.length >= 1) {
+    const first = sorted[0];
+    const last  = sorted[sorted.length-1];
+    const fx = xScale(0), lx = xScale(sorted.length-1);
+    const labelY = PAD.t + cH + 18;
+    const fmt = s => { const [y,m,d]=s.split('-'); return `${parseInt(m)}/${parseInt(d)}`; };
+    xLabels += `<text x="${fx}" y="${labelY}" font-size="9" fill="#555" text-anchor="middle" font-family="DM Sans,sans-serif">${fmt(first.date)}</text>`;
+    if (sorted.length > 1) {
+      xLabels += `<text x="${lx}" y="${labelY}" font-size="9" fill="#4ade80" text-anchor="middle" font-family="DM Sans,sans-serif">${fmt(last.date)}</text>`;
+    }
+  }
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="wgrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4ade80" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridHTML}
+    <path d="${areaD}" fill="url(#wgrad)"/>
+    <path d="${pathD}" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px rgba(74,222,128,0.4))"/>
+    ${dotsHTML}
+    ${xLabels}`;
+}
+
 // ── SETTINGS ──
 function renderSettings() {
-  document.getElementById('goal-input').value = goal;
+  document.getElementById('goal-input').value   = goal;
+  document.getElementById('wstart-input').value = wStart || '';
+  document.getElementById('wgoal-input').value  = wGoal  || '';
 }
 function saveGoal() {
   const v = parseInt(document.getElementById('goal-input').value);
   if (isNaN(v) || v < 100) { toast('Enter a valid goal (min 100)'); return; }
-  goal = v;
-  saveGoalData();
-  toast('Goal saved!');
+  goal = v; saveGoalData(); toast('Calorie goal saved!');
+}
+function saveWeightSettings() {
+  const s = parseFloat(document.getElementById('wstart-input').value);
+  const g = parseFloat(document.getElementById('wgoal-input').value);
+  if (isNaN(s) || s <= 0 || isNaN(g) || g <= 0) { toast('Enter valid weights'); return; }
+  wStart = s; wGoal = g; saveWSettings(); toast('Weight settings saved!');
 }
 
-// ── CLEAR DATA ──
+// ── CLEAR ──
 function confirmClear() { document.getElementById('confirm-overlay').classList.add('open'); }
 function closeConfirm()  { document.getElementById('confirm-overlay').classList.remove('open'); }
 function clearAllData() {
-  entries = []; goal = 2000;
-  saveEntries(); saveGoalData();
-  closeConfirm();
-  homeDayOffset = 0;
-  histWeekOffset = 0;
+  entries = []; goal = 2000; weighIns = []; wStart = 0; wGoal = 0;
+  saveEntries(); saveGoalData(); saveWeighIns();
+  localStorage.removeItem(KEY_WSTART); localStorage.removeItem(KEY_WGOAL);
+  closeConfirm(); homeDayOffset = 0; histWeekOffset = 0;
   toast('All data cleared');
-  renderSettings();
-  renderHome();
+  renderSettings(); renderHome();
 }
 
 // ── INIT ──
 renderHome();
 
-// Swipe down to close modal
-let touchStartY = 0;
-document.getElementById('modal').addEventListener('touchstart', e => {
-  touchStartY = e.touches[0].clientY;
-}, {passive:true});
-document.getElementById('modal').addEventListener('touchmove', e => {
-  if (e.touches[0].clientY - touchStartY > 80) closeModal();
-}, {passive:true});
+// swipe down to close modals
+function addSwipeClose(modalId, closeFn) {
+  let sy = 0;
+  document.getElementById(modalId).addEventListener('touchstart', e => { sy = e.touches[0].clientY; }, {passive:true});
+  document.getElementById(modalId).addEventListener('touchmove',  e => { if (e.touches[0].clientY - sy > 80) closeFn(); }, {passive:true});
+}
+addSwipeClose('modal',  closeModal);
+addSwipeClose('wmodal', closeWModal);
 </script>
 </body>
 </html>
